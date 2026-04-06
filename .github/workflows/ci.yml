@@ -6,7 +6,7 @@ permissions:
   actions: read
 
 env:
-  REPO: "sealio"
+  REPO: "avkanavt"
   VERSION: "${{ github.ref_name }}"
   BUILD_PLATFORMS: "linux/amd64,linux/arm64"
   PARALLELIZE: "false"
