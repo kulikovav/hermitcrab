@@ -372,7 +372,21 @@ func (s *service) Query(ctx context.Context, opts QueryOptions) ([]Version, erro
 
 		// Otherwise, sync versions.
 		err = s.syncVersions(ctx,
-			opts.Hostname, opts.Namespace, opts.Type)
+			opts.Hostname, opts.Namespace, opts.Type, false)
+		if err == nil {
+			runtime.Gosched()
+			return s.Query(ctx, opts)
+		}
+	case errors.Is(err, ErrVersionNotFound):
+		// Typed bucket exists but this version was never synced (e.g. new release).
+		if s.isSyncing(path.Join(opts.Hostname, opts.Namespace, opts.Type)) {
+			time.Sleep(wait)
+			return s.Query(ctx, opts)
+		}
+
+		// Force a full version list fetch; incremental If-Modified-Since may be stale.
+		err = s.syncVersions(ctx,
+			opts.Hostname, opts.Namespace, opts.Type, true)
 		if err == nil {
 			runtime.Gosched()
 			return s.Query(ctx, opts)
@@ -428,6 +442,7 @@ func (s *service) Sync(ctx context.Context) error {
 							string(typedBucketName[0]),
 							string(typedBucketName[1]),
 							string(typedBucketName[2]),
+							false,
 						),
 					)
 				}
@@ -447,7 +462,10 @@ func (s *service) isSyncing(k string) bool {
 	return syncing
 }
 
-func (s *service) syncVersions(ctx context.Context, h, n, t string) error {
+// syncVersions pulls provider versions from the registry. If forceFull is true, the request
+// omits If-Modified-Since so the full version list is fetched (used when a requested version
+// is missing locally despite the typed bucket existing).
+func (s *service) syncVersions(ctx context.Context, h, n, t string, forceFull bool) error {
 	logger := log.WithName("provider").WithName("metadata").
 		WithValues("hostname", h, "namespace", n, "type", t)
 
@@ -470,8 +488,10 @@ func (s *service) syncVersions(ctx context.Context, h, n, t string) error {
 		}
 
 		var since time.Time
-		if sinceB := typedBucket.Get(toBytes("modified")); len(sinceB) != 0 {
-			since, _ = time.Parse(time.RFC3339, string(sinceB))
+		if !forceFull {
+			if sinceB := typedBucket.Get(toBytes("modified")); len(sinceB) != 0 {
+				since, _ = time.Parse(time.RFC3339, string(sinceB))
+			}
 		}
 
 		versionsB, err := registry.Host(h).
@@ -482,10 +502,10 @@ func (s *service) syncVersions(ctx context.Context, h, n, t string) error {
 		}
 
 		if len(versionsB) == 0 {
-			_ = typedBucket.Put(toBytes("modified"), toBytes(time.Now().Format(time.RFC3339)))
-
+			// registry.GetVersions returns nil body only for 304 Not Modified. Do not advance
+			// stored modified time; doing so skews If-Modified-Since and can hide new versions.
 			if !since.IsZero() {
-				logger.Debug("no new versions")
+				logger.Debug("versions not modified (304)")
 			}
 
 			return nil
