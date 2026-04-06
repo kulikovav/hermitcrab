@@ -18,7 +18,8 @@ func (r *Server) startTasks(ctx context.Context, opts initOptions) (err error) {
 	}
 
 	// Register tasks.
-	err = cron.Schedule(provider.SyncMetadata(ctx, opts.ProviderService))
+	name, expr, task := provider.SyncMetadata(ctx, opts.ProviderService)
+	err = cron.Schedule(name, expr, task)
 
 	return err
 }
