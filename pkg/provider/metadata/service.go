@@ -488,6 +488,7 @@ func (s *service) syncVersions(ctx context.Context, h, n, t string, forceFull bo
 		}
 
 		var since time.Time
+
 		if !forceFull {
 			sinceB := typedBucket.Get(toBytes("modified"))
 			if len(sinceB) != 0 {
