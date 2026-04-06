@@ -462,6 +462,24 @@ func (s *service) isSyncing(k string) bool {
 	return syncing
 }
 
+// sinceForProviderVersions returns the If-Modified-Since baseline for listing provider versions.
+// If forceFull is set, zero time is returned so the registry omits If-Modified-Since and returns
+// the full version list.
+func sinceForProviderVersions(typedBucket *bolt.Bucket, forceFull bool) time.Time {
+	if forceFull {
+		return time.Time{}
+	}
+
+	sinceB := typedBucket.Get(toBytes("modified"))
+	if len(sinceB) == 0 {
+		return time.Time{}
+	}
+
+	since, _ := time.Parse(time.RFC3339, string(sinceB))
+
+	return since
+}
+
 // syncVersions pulls provider versions from the registry. If forceFull is true, the request
 // omits If-Modified-Since so the full version list is fetched (used when a requested version
 // is missing locally despite the typed bucket existing).
@@ -487,14 +505,7 @@ func (s *service) syncVersions(ctx context.Context, h, n, t string, forceFull bo
 			return fmt.Errorf("error creating typed bucket: %w", err)
 		}
 
-		var since time.Time
-
-		if !forceFull {
-			sinceB := typedBucket.Get(toBytes("modified"))
-			if len(sinceB) != 0 {
-				since, _ = time.Parse(time.RFC3339, string(sinceB))
-			}
-		}
+		since := sinceForProviderVersions(typedBucket, forceFull)
 
 		versionsB, err := registry.Host(h).
 			Provider(ctx).

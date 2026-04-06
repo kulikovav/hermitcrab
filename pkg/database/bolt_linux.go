@@ -1,7 +1,6 @@
 package database
 
 import (
-	"syscall"
 	"time"
 
 	bolt "go.etcd.io/bbolt"
