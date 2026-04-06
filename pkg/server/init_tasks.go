@@ -6,7 +6,7 @@ import (
 
 	"github.com/seal-io/walrus/utils/cron"
 
-	"github.com/seal-io/hermitcrab/pkg/tasks/provider"
+	"github.com/kulikovav/hermitcrab/pkg/tasks/provider"
 )
 
 // startTasks starts the tasks by Cron Expression to do something periodically in background.

@@ -1,4 +1,4 @@
-module github.com/seal-io/hermitcrab
+module github.com/kulikovav/hermitcrab
 
 go 1.21
 

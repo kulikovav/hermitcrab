@@ -10,8 +10,8 @@ import (
 
 	"github.com/seal-io/walrus/utils/strs"
 
-	"github.com/seal-io/hermitcrab/pkg/database"
-	"github.com/seal-io/hermitcrab/pkg/provider"
+	"github.com/kulikovav/hermitcrab/pkg/database"
+	"github.com/kulikovav/hermitcrab/pkg/provider"
 )
 
 type initOptions struct {

@@ -31,7 +31,7 @@ func Test_regexValidArchive(t *testing.T) {
 			given:    "terraform-provider-foo__darwin_amd64.zip.zip",
 			expected: false,
 		},
-		// See https://github.com/seal-io/hermitcrab/issues/15.
+		// See https://github.com/seal-io/hermitcrab/issues/15 (upstream).
 		{
 			given:    "terraform-provider-teleport-v14.3.3-darwin-arm64-bin.zip",
 			expected: true,

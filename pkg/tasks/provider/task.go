@@ -5,7 +5,7 @@ import (
 
 	"github.com/seal-io/walrus/utils/cron"
 
-	"github.com/seal-io/hermitcrab/pkg/provider"
+	"github.com/kulikovav/hermitcrab/pkg/provider"
 )
 
 // SyncMetadata creates a Cron task to sync the metadata from remote to local 30 minutes.

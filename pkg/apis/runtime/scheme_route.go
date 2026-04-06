@@ -19,7 +19,7 @@ import (
 	"golang.org/x/exp/slices"
 	"k8s.io/apimachinery/pkg/util/sets"
 
-	"github.com/seal-io/hermitcrab/pkg/apis/runtime/openapi"
+	"github.com/kulikovav/hermitcrab/pkg/apis/runtime/openapi"
 )
 
 var openAPISchemas = &openapi3.T{

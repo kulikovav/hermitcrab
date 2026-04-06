@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/seal-io/hermitcrab/pkg/apis/runtime"
-	"github.com/seal-io/hermitcrab/pkg/download"
+	"github.com/kulikovav/hermitcrab/pkg/apis/runtime"
+	"github.com/kulikovav/hermitcrab/pkg/download"
 )
 
 type (

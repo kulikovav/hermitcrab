@@ -21,8 +21,8 @@ import (
 	bolt "go.etcd.io/bbolt"
 	"go.uber.org/multierr"
 
-	"github.com/seal-io/hermitcrab/pkg/database"
-	"github.com/seal-io/hermitcrab/pkg/registry"
+	"github.com/kulikovav/hermitcrab/pkg/database"
+	"github.com/kulikovav/hermitcrab/pkg/registry"
 )
 
 var (

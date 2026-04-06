@@ -18,7 +18,7 @@ import (
 	"golang.org/x/exp/slices"
 	"k8s.io/apimachinery/pkg/util/sets"
 
-	"github.com/seal-io/hermitcrab/pkg/apis/runtime/bind"
+	"github.com/kulikovav/hermitcrab/pkg/apis/runtime/bind"
 )
 
 func (rt *Router) Routes(handler IHandler) IRouter {

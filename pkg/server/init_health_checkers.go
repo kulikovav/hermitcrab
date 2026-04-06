@@ -5,8 +5,8 @@ import (
 
 	"github.com/seal-io/walrus/utils/gopool"
 
-	"github.com/seal-io/hermitcrab/pkg/database"
-	"github.com/seal-io/hermitcrab/pkg/health"
+	"github.com/kulikovav/hermitcrab/pkg/database"
+	"github.com/kulikovav/hermitcrab/pkg/health"
 )
 
 // registerHealthCheckers registers the health checkers into the global health registry.

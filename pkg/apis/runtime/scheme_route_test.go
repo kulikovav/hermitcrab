@@ -16,7 +16,7 @@ import (
 	"github.com/seal-io/walrus/utils/json"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/seal-io/hermitcrab/pkg/apis/runtime/openapi"
+	"github.com/kulikovav/hermitcrab/pkg/apis/runtime/openapi"
 )
 
 type (

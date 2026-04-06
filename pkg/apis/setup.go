@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/seal-io/hermitcrab/pkg/apis/debug"
-	"github.com/seal-io/hermitcrab/pkg/apis/measure"
-	providerapis "github.com/seal-io/hermitcrab/pkg/apis/provider"
-	"github.com/seal-io/hermitcrab/pkg/apis/runtime"
-	"github.com/seal-io/hermitcrab/pkg/provider"
+	"github.com/kulikovav/hermitcrab/pkg/apis/debug"
+	"github.com/kulikovav/hermitcrab/pkg/apis/measure"
+	providerapis "github.com/kulikovav/hermitcrab/pkg/apis/provider"
+	"github.com/kulikovav/hermitcrab/pkg/apis/runtime"
+	"github.com/kulikovav/hermitcrab/pkg/provider"
 )
 
 type SetupOptions struct {

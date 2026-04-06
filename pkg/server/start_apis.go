@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/seal-io/hermitcrab/pkg/apis"
-	"github.com/seal-io/hermitcrab/pkg/provider"
+	"github.com/kulikovav/hermitcrab/pkg/apis"
+	"github.com/kulikovav/hermitcrab/pkg/provider"
 )
 
 type startApisOptions struct {

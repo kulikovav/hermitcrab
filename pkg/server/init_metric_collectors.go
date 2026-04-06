@@ -6,9 +6,9 @@ import (
 	"github.com/seal-io/walrus/utils/cron"
 	"github.com/seal-io/walrus/utils/gopool"
 
-	"github.com/seal-io/hermitcrab/pkg/apis/runtime"
-	"github.com/seal-io/hermitcrab/pkg/database"
-	"github.com/seal-io/hermitcrab/pkg/metric"
+	"github.com/kulikovav/hermitcrab/pkg/apis/runtime"
+	"github.com/kulikovav/hermitcrab/pkg/database"
+	"github.com/kulikovav/hermitcrab/pkg/metric"
 )
 
 // registerMetricCollectors registers the metric collectors into the global metric registry.

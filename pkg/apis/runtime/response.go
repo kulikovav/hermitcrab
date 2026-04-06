@@ -9,7 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/seal-io/hermitcrab/pkg/apis/runtime/bind"
+	"github.com/kulikovav/hermitcrab/pkg/apis/runtime/bind"
 )
 
 // NoPageResponse returns the given data without pagination.

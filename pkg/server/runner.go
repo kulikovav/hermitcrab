@@ -22,9 +22,9 @@ import (
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	klog "k8s.io/klog/v2"
 
-	"github.com/seal-io/hermitcrab/pkg/consts"
-	"github.com/seal-io/hermitcrab/pkg/database"
-	"github.com/seal-io/hermitcrab/pkg/provider"
+	"github.com/kulikovav/hermitcrab/pkg/consts"
+	"github.com/kulikovav/hermitcrab/pkg/database"
+	"github.com/kulikovav/hermitcrab/pkg/provider"
 )
 
 type Server struct {

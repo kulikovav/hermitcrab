@@ -7,7 +7,7 @@ import (
 	"github.com/seal-io/walrus/utils/log"
 	"github.com/seal-io/walrus/utils/signals"
 
-	"github.com/seal-io/hermitcrab/pkg/server"
+	"github.com/kulikovav/hermitcrab/pkg/server"
 )
 
 func main() {
