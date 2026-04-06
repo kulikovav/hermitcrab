@@ -515,7 +515,7 @@ func (s *service) syncVersions(ctx context.Context, h, n, t string, forceFull bo
 		}
 
 		if len(versionsB) == 0 {
-			// registry.GetVersions returns nil body only for 304 Not Modified. Do not advance
+			// Registry.GetVersions returns nil body only for 304 Not Modified. Do not advance
 			// stored modified time; doing so skews If-Modified-Since and can hide new versions.
 			if !since.IsZero() {
 				logger.Debug("versions not modified (304)")
