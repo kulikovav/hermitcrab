@@ -265,7 +265,8 @@ func Test_getOperationParameters(t *testing.T) {
 					WithSchema(openapi3.NewBoolSchema())
 				pv.Extensions = map[string]any{openapi.ExtCliCmdIgnore: true}
 
-				refs = append(refs,
+				refs = append(
+					refs,
 					&openapi3.ParameterRef{
 						Value: openapi3.NewPathParameter("stringPath").
 							WithSchema(openapi3.NewStringSchema()),
@@ -304,7 +305,8 @@ func Test_getOperationParameters(t *testing.T) {
 				RequestType: reflect.TypeOf(B{}),
 			},
 			expected: func() (refs openapi3.Parameters) {
-				refs = append(refs,
+				refs = append(
+					refs,
 					&openapi3.ParameterRef{
 						Value: openapi3.NewPathParameter("stringPath").
 							WithSchema(openapi3.NewStringSchema()),
@@ -377,7 +379,8 @@ func Test_getOperationParameters(t *testing.T) {
 				RequestType: reflect.TypeOf(F{}),
 			},
 			expected: func() (refs openapi3.Parameters) {
-				refs = append(refs,
+				refs = append(
+					refs,
 					&openapi3.ParameterRef{
 						Value: openapi3.NewPathParameter("stringPath").
 							WithSchema(openapi3.NewStringSchema()),
@@ -912,7 +915,8 @@ func Test_getOperationHTTPResponses(t *testing.T) {
 									WithItems(s).
 									NewRef(),
 							},
-						}))
+						}),
+				)
 
 				return referErrorResponses(resps)
 			}(),

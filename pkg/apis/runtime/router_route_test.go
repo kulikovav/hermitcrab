@@ -529,8 +529,8 @@ func Test_routeResourceHandler(t *testing.T) {
 			actual := routeHandler("", ResourceProfile{}, tc.given, nil)
 			// Clear out the fields for comparison.
 			for i := range actual {
-				actual[i].RouteProfile.Summary = ""
-				actual[i].RouteProfile.Description = ""
+				actual[i].Summary = ""
+				actual[i].Description = ""
 				actual[i].GoCaller = reflect.Value{}
 				actual[i].RequestType = nil
 				actual[i].ResponseType = nil

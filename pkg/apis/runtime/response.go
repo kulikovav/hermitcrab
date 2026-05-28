@@ -137,7 +137,7 @@ func (r ResponseFile) Render(w http.ResponseWriter) (err error) {
 func (r ResponseFile) WriteContentType(w http.ResponseWriter) {
 	header := w.Header()
 	if vs := header["Content-Type"]; len(vs) == 0 {
-		contentType := "application/octet-stream"
+		contentType := contentInOctetStream
 		if r.ContentType != "" {
 			contentType = r.ContentType
 		}

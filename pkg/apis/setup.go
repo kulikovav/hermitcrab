@@ -42,7 +42,8 @@ func (s *Server) Setup(ctx context.Context, opts SetupOptions) (http.Handler, er
 			"/readyz",
 			"/livez",
 			"/metrics",
-			"/debug/version"),
+			"/debug/version",
+		),
 		runtime.ExposeOpenAPI(),
 	}
 

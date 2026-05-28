@@ -143,7 +143,8 @@ func observing(c *gin.Context) {
 			reqPath = reqPath + "?" + raw
 		}
 
-		logger.Debugf("%s | %8s | %10s | %10s | %13v | %15s | %-7s %s",
+		logger.Debugf(
+			"%s | %8s | %10s | %10s | %13v | %15s | %-7s %s",
 			respStatus,
 			reqProto,
 			reqSize,

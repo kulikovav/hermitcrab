@@ -69,7 +69,8 @@ func (s *service) LoadArchive(ctx context.Context, opts LoadArchiveOptions) (Arc
 		p := filepath.Join(
 			s.impliedDir,
 			opts.Hostname, opts.Namespace, opts.Type,
-			opts.Filename)
+			opts.Filename,
+		)
 
 		fi, err := os.Stat(p)
 		if err != nil {

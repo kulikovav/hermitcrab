@@ -130,7 +130,8 @@ func (r *Server) Flags(cmd *cli.Command) {
 
 				if s == "" {
 					return errors.New(
-						"--tls-cert-dir: must be filled if --tls-cert-file and --tls-private-key-file are not provided")
+						"--tls-cert-dir: must be filled if --tls-cert-file and --tls-private-key-file are not provided",
+					)
 				}
 
 				if !filepath.IsAbs(s) {

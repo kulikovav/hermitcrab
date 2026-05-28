@@ -42,8 +42,9 @@ const (
 	parameterInHeader = openapi3.ParameterInHeader
 	parameterInQuery  = openapi3.ParameterInQuery
 
-	contentInForm = "form"
-	contentInJSON = "json"
+	contentInForm        = "form"
+	contentInJSON        = "json"
+	contentInOctetStream = "application/octet-stream"
 )
 
 func schemeRoute(bp string, r *Route) error {
@@ -450,7 +451,7 @@ func getOperationHTTPResponses(r *Route) *openapi3.Responses {
 	if schemaRef.Value != nil && schemaRef.Value.Type != openapi3.TypeArray &&
 		schemaRef.Value.Type != openapi3.TypeObject {
 		// Response in bytes.
-		contentType = "application/octet-stream"
+		contentType = contentInOctetStream
 	}
 
 	resps := newResponses(
@@ -541,13 +542,15 @@ func getErrorResponses() openapi3.ResponseBodies {
 		resps[strconv.Itoa(c)] = &openapi3.ResponseRef{
 			Value: openapi3.NewResponse().
 				WithDescription(http.StatusText(c)).
-				WithContent(openapi3.NewContentWithJSONSchema(
-					openapi3.NewObjectSchema().
-						WithProperty("status", openapi3.NewIntegerSchema().
-							WithDefault(c)).
-						WithProperty("statusText", openapi3.NewStringSchema().
-							WithDefault(http.StatusText(c))).
-						WithProperty("message", openapi3.NewStringSchema())),
+				WithContent(
+					openapi3.NewContentWithJSONSchema(
+						openapi3.NewObjectSchema().
+							WithProperty("status", openapi3.NewIntegerSchema().
+								WithDefault(c)).
+							WithProperty("statusText", openapi3.NewStringSchema().
+								WithDefault(http.StatusText(c))).
+							WithProperty("message", openapi3.NewStringSchema()),
+					),
 				),
 		}
 	}
@@ -796,8 +799,7 @@ func getSchemaOfGoType(
 		if len(s.Properties) == 0 &&
 			s.AdditionalProperties.Schema == nil &&
 			s.Items == nil &&
-			!(s.Type == openapi3.TypeString &&
-				slices.Contains([]string{stringTypeFormatBinary, stringTypeFormatByte}, s.Format)) {
+			(s.Type != openapi3.TypeString || !slices.Contains([]string{stringTypeFormatBinary, stringTypeFormatByte}, s.Format)) {
 			visited.Delete(id)
 			return nil
 		}

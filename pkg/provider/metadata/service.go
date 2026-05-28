@@ -214,7 +214,8 @@ func (s *service) Query(ctx context.Context, opts QueryOptions) ([]Version, erro
 		}
 
 		logger := logger.WithValues(
-			"hostname", opts.Hostname, "namespace", opts.Namespace, "type", opts.Type)
+			"hostname", opts.Hostname, "namespace", opts.Namespace, "type", opts.Type,
+		)
 
 		// Deep in one version.
 		if opts.Version != "" {
@@ -229,7 +230,8 @@ func (s *service) Query(ctx context.Context, opts QueryOptions) ([]Version, erro
 			}
 
 			logger := logger.WithValues(
-				"version", opts.Version)
+				"version", opts.Version,
+			)
 
 			var version Version
 			if err := json.Unmarshal(data, &version); err != nil {
@@ -437,8 +439,10 @@ func (s *service) Sync(ctx context.Context) error {
 				for k := range typedBucketNames {
 					typedBucketName := typedBucketNames[k]
 
-					err = multierr.Append(err,
-						s.syncVersions(ctx,
+					err = multierr.Append(
+						err,
+						s.syncVersions(
+							ctx,
 							string(typedBucketName[0]),
 							string(typedBucketName[1]),
 							string(typedBucketName[2]),

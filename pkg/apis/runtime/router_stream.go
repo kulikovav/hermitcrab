@@ -231,7 +231,8 @@ func doBidiStreamRequest(c *gin.Context, route Route, routeInput reflect.Value) 
 			var we *websocket.CloseError
 			if errors.As(err, &we) {
 				closeMsg = websocket.FormatCloseMessage(
-					we.Code, we.Text)
+					we.Code, we.Text,
+				)
 
 				c.Set("response_status", we.Code)
 			} else {
@@ -241,7 +242,8 @@ func doBidiStreamRequest(c *gin.Context, route Route, routeInput reflect.Value) 
 					err = ue
 				}
 				closeMsg = websocket.FormatCloseMessage(
-					websocket.CloseInternalServerErr, err.Error())
+					websocket.CloseInternalServerErr, err.Error(),
+				)
 
 				c.Set("response_status", websocket.CloseInternalServerErr)
 			}
