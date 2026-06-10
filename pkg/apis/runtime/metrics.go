@@ -4,6 +4,18 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
+const (
+	labelProto  = "proto"
+	labelPath   = "path"
+	labelMethod = "method"
+	labelCode   = "code"
+)
+
+var (
+	labelNamesRequest     = []string{labelProto, labelPath, labelMethod}
+	labelNamesRequestCode = []string{labelProto, labelPath, labelMethod, labelCode}
+)
+
 var _statsCollector = newStatsCollector()
 
 func NewStatsCollector() prometheus.Collector {
@@ -20,7 +32,7 @@ func newStatsCollector() *statsCollector {
 				Name:      "request_inflight",
 				Help:      "The number of inflight request.",
 			},
-			[]string{"proto", "path", "method"},
+			labelNamesRequest,
 		),
 		requestCounter: prometheus.NewCounterVec(
 			prometheus.CounterOpts{
@@ -28,7 +40,7 @@ func newStatsCollector() *statsCollector {
 				Name:      "request_total",
 				Help:      "The total number of requests.",
 			},
-			[]string{"proto", "path", "method", "code"},
+			labelNamesRequestCode,
 		),
 		requestDurations: prometheus.NewHistogramVec(
 			prometheus.HistogramOpts{
@@ -61,7 +73,7 @@ func newStatsCollector() *statsCollector {
 					60,
 				},
 			},
-			[]string{"proto", "path", "method", "code"},
+			labelNamesRequestCode,
 		),
 		requestSizes: prometheus.NewHistogramVec(
 			prometheus.HistogramOpts{
@@ -70,7 +82,7 @@ func newStatsCollector() *statsCollector {
 				Help:      "The request size distribution in bytes.",
 				Buckets:   prometheus.ExponentialBuckets(128, 2.0, 15), // 128B, 256B, ..., 2M.
 			},
-			[]string{"proto", "path", "method"},
+			labelNamesRequest,
 		),
 		responseSizes: prometheus.NewHistogramVec(
 			prometheus.HistogramOpts{
@@ -79,7 +91,7 @@ func newStatsCollector() *statsCollector {
 				Help:      "The response size distribution in bytes.",
 				Buckets:   prometheus.ExponentialBuckets(128, 2.0, 15), // 128B, 256B, ..., 2M.
 			},
-			[]string{"proto", "path", "method"},
+			labelNamesRequest,
 		),
 	}
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/seal-io/walrus/utils/log"
 	"github.com/seal-io/walrus/utils/version"
 
-	"github.com/seal-io/hermitcrab/pkg/apis/runtime"
+	"github.com/kulikovav/hermitcrab/pkg/apis/runtime"
 )
 
 func Version() runtime.Handle {

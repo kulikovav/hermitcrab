@@ -12,9 +12,9 @@ import (
 	"github.com/seal-io/walrus/utils/log"
 	"k8s.io/apimachinery/pkg/util/sets"
 
-	"github.com/seal-io/hermitcrab/pkg/provider"
-	"github.com/seal-io/hermitcrab/pkg/provider/metadata"
-	"github.com/seal-io/hermitcrab/pkg/provider/storage"
+	"github.com/kulikovav/hermitcrab/pkg/provider"
+	"github.com/kulikovav/hermitcrab/pkg/provider/metadata"
+	"github.com/kulikovav/hermitcrab/pkg/provider/storage"
 )
 
 func Handle(service *provider.Service) *Handler {

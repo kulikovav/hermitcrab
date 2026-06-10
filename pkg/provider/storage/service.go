@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/seal-io/hermitcrab/pkg/apis/runtime"
-	"github.com/seal-io/hermitcrab/pkg/download"
+	"github.com/kulikovav/hermitcrab/pkg/apis/runtime"
+	"github.com/kulikovav/hermitcrab/pkg/download"
 )
 
 type (
@@ -69,7 +69,8 @@ func (s *service) LoadArchive(ctx context.Context, opts LoadArchiveOptions) (Arc
 		p := filepath.Join(
 			s.impliedDir,
 			opts.Hostname, opts.Namespace, opts.Type,
-			opts.Filename)
+			opts.Filename,
+		)
 
 		fi, err := os.Stat(p)
 		if err != nil {

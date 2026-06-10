@@ -43,6 +43,7 @@ func WithDefaultHandler(handler IHandler) RouterOption {
 	return ginEngineOption(func(eng *gin.Engine) {
 		eng.NoRoute(
 			asHandle(handler),
-			noRoute)
+			noRoute,
+		)
 	})
 }

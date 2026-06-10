@@ -12,6 +12,8 @@ import (
 	"github.com/seal-io/walrus/utils/version"
 )
 
+const schemeHTTPS = "https"
+
 var httpCli = req.HTTP().
 	WithInsecureSkipVerifyEnabled().
 	WithUserAgent(version.GetUserAgentWith("hermitcrab"))
@@ -32,7 +34,7 @@ type Host string
 func (h Host) Discover(ctx context.Context, service string) url.URL {
 	var (
 		u = &url.URL{
-			Scheme: "https",
+			Scheme: schemeHTTPS,
 			Host:   string(h),
 		}
 		b = map[string]string{}
@@ -55,13 +57,13 @@ func (h Host) Provider(ctx context.Context) Provider {
 	switch h {
 	case "registry.terraform.io":
 		return Provider(url.URL{
-			Scheme: "https",
+			Scheme: schemeHTTPS,
 			Host:   "registry.terraform.io",
 			Path:   "/v1/providers/",
 		})
 	case "registry.opentofu.org":
 		return Provider(url.URL{
-			Scheme: "https",
+			Scheme: schemeHTTPS,
 			Host:   "registry.opentofu.org",
 			Path:   "/v1/providers/",
 		})
@@ -168,7 +170,8 @@ func (p Provider) GetPlatform(
 		rq = rq.WithHeader("If-Modified-Since", since[0].Format(http.TimeFormat))
 	}
 
-	r := rq.GetWithContext(ctx,
+	r := rq.GetWithContext(
+		ctx,
 		resolveURLString((*url.URL)(&p), path.Join(namespace, type_, version, "download", os, arch)),
 	)
 
@@ -256,7 +259,8 @@ func (m Module) GetVersion(
 		rq = rq.WithHeader("If-Modified-Since", since[0].Format(http.TimeFormat))
 	}
 
-	r := rq.GetWithContext(ctx,
+	r := rq.GetWithContext(
+		ctx,
 		resolveURLString((*url.URL)(&m), path.Join(namespace, name, system, version, "download")),
 	)
 

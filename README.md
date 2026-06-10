@@ -2,11 +2,11 @@
 
 > tl;dr: Available Terraform/OpenTofu Provider network mirroring service.
 
-[![](https://goreportcard.com/badge/github.com/seal-io/hermitcrab)](https://goreportcard.com/report/github.com/seal-io/hermitcrab)
-[![](https://img.shields.io/github/actions/workflow/status/seal-io/hermitcrab/ci.yml?label=ci)](https://github.com/seal-io/hermitcrab/actions)
+[![](https://goreportcard.com/badge/github.com/kulikovav/hermitcrab)](https://goreportcard.com/report/github.com/kulikovav/hermitcrab)
+[![](https://img.shields.io/github/actions/workflow/status/kulikovav/hermitcrab/ci.yml?label=ci)](https://github.com/kulikovav/hermitcrab/actions)
 [![](https://img.shields.io/docker/image-size/sealio/hermitcrab/main?label=docker)](https://hub.docker.com/r/sealio/hermitcrab/tags)
-[![](https://img.shields.io/github/v/tag/seal-io/hermitcrab?label=release)](https://github.com/seal-io/hermitcrab/releases) 
-[![](https://img.shields.io/github/license/seal-io/hermitcrab?label=license)](https://github.com/seal-io/hermitcrab#license)
+[![](https://img.shields.io/github/v/tag/kulikovav/hermitcrab?label=release)](https://github.com/kulikovav/hermitcrab/releases) 
+[![](https://img.shields.io/github/license/kulikovav/hermitcrab?label=license)](https://github.com/kulikovav/hermitcrab#license)
 
 Hermit Crab provides a stable and reliable [Terraform](https://registry.terraform.io/browse/providers)/[OpenTofu](https://opentofu.org/registry/) Provider network mirror service. 
 

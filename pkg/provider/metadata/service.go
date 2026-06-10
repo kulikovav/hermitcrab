@@ -21,8 +21,8 @@ import (
 	bolt "go.etcd.io/bbolt"
 	"go.uber.org/multierr"
 
-	"github.com/seal-io/hermitcrab/pkg/database"
-	"github.com/seal-io/hermitcrab/pkg/registry"
+	"github.com/kulikovav/hermitcrab/pkg/database"
+	"github.com/kulikovav/hermitcrab/pkg/registry"
 )
 
 var (
@@ -214,7 +214,8 @@ func (s *service) Query(ctx context.Context, opts QueryOptions) ([]Version, erro
 		}
 
 		logger := logger.WithValues(
-			"hostname", opts.Hostname, "namespace", opts.Namespace, "type", opts.Type)
+			"hostname", opts.Hostname, "namespace", opts.Namespace, "type", opts.Type,
+		)
 
 		// Deep in one version.
 		if opts.Version != "" {
@@ -229,7 +230,8 @@ func (s *service) Query(ctx context.Context, opts QueryOptions) ([]Version, erro
 			}
 
 			logger := logger.WithValues(
-				"version", opts.Version)
+				"version", opts.Version,
+			)
 
 			var version Version
 			if err := json.Unmarshal(data, &version); err != nil {
@@ -372,7 +374,21 @@ func (s *service) Query(ctx context.Context, opts QueryOptions) ([]Version, erro
 
 		// Otherwise, sync versions.
 		err = s.syncVersions(ctx,
-			opts.Hostname, opts.Namespace, opts.Type)
+			opts.Hostname, opts.Namespace, opts.Type, false)
+		if err == nil {
+			runtime.Gosched()
+			return s.Query(ctx, opts)
+		}
+	case errors.Is(err, ErrVersionNotFound):
+		// Typed bucket exists but this version was never synced (e.g. new release).
+		if s.isSyncing(path.Join(opts.Hostname, opts.Namespace, opts.Type)) {
+			time.Sleep(wait)
+			return s.Query(ctx, opts)
+		}
+
+		// Force a full version list fetch; incremental If-Modified-Since may be stale.
+		err = s.syncVersions(ctx,
+			opts.Hostname, opts.Namespace, opts.Type, true)
 		if err == nil {
 			runtime.Gosched()
 			return s.Query(ctx, opts)
@@ -423,11 +439,14 @@ func (s *service) Sync(ctx context.Context) error {
 				for k := range typedBucketNames {
 					typedBucketName := typedBucketNames[k]
 
-					err = multierr.Append(err,
-						s.syncVersions(ctx,
+					err = multierr.Append(
+						err,
+						s.syncVersions(
+							ctx,
 							string(typedBucketName[0]),
 							string(typedBucketName[1]),
 							string(typedBucketName[2]),
+							false,
 						),
 					)
 				}
@@ -447,7 +466,28 @@ func (s *service) isSyncing(k string) bool {
 	return syncing
 }
 
-func (s *service) syncVersions(ctx context.Context, h, n, t string) error {
+// sinceForProviderVersions returns the If-Modified-Since baseline for listing provider versions.
+// If forceFull is set, zero time is returned so the registry omits If-Modified-Since and returns
+// the full version list.
+func sinceForProviderVersions(typedBucket *bolt.Bucket, forceFull bool) time.Time {
+	if forceFull {
+		return time.Time{}
+	}
+
+	sinceB := typedBucket.Get(toBytes("modified"))
+	if len(sinceB) == 0 {
+		return time.Time{}
+	}
+
+	since, _ := time.Parse(time.RFC3339, string(sinceB))
+
+	return since
+}
+
+// syncVersions pulls provider versions from the registry. If forceFull is true, the request
+// omits If-Modified-Since so the full version list is fetched (used when a requested version
+// is missing locally despite the typed bucket existing).
+func (s *service) syncVersions(ctx context.Context, h, n, t string, forceFull bool) error {
 	logger := log.WithName("provider").WithName("metadata").
 		WithValues("hostname", h, "namespace", n, "type", t)
 
@@ -469,10 +509,7 @@ func (s *service) syncVersions(ctx context.Context, h, n, t string) error {
 			return fmt.Errorf("error creating typed bucket: %w", err)
 		}
 
-		var since time.Time
-		if sinceB := typedBucket.Get(toBytes("modified")); len(sinceB) != 0 {
-			since, _ = time.Parse(time.RFC3339, string(sinceB))
-		}
+		since := sinceForProviderVersions(typedBucket, forceFull)
 
 		versionsB, err := registry.Host(h).
 			Provider(ctx).
@@ -482,10 +519,10 @@ func (s *service) syncVersions(ctx context.Context, h, n, t string) error {
 		}
 
 		if len(versionsB) == 0 {
-			_ = typedBucket.Put(toBytes("modified"), toBytes(time.Now().Format(time.RFC3339)))
-
+			// Registry.GetVersions returns nil body only for 304 Not Modified. Do not advance
+			// stored modified time; doing so skews If-Modified-Since and can hide new versions.
 			if !since.IsZero() {
-				logger.Debug("no new versions")
+				logger.Debug("versions not modified (304)")
 			}
 
 			return nil

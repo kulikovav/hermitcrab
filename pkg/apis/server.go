@@ -17,7 +17,7 @@ import (
 	"golang.org/x/crypto/acme"
 	"golang.org/x/crypto/acme/autocert"
 
-	"github.com/seal-io/hermitcrab/pkg/apis/config"
+	"github.com/kulikovav/hermitcrab/pkg/apis/config"
 )
 
 func NewServer() (*Server, error) {

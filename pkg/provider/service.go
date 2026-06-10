@@ -3,9 +3,9 @@ package provider
 import (
 	"fmt"
 
-	"github.com/seal-io/hermitcrab/pkg/database"
-	"github.com/seal-io/hermitcrab/pkg/provider/metadata"
-	"github.com/seal-io/hermitcrab/pkg/provider/storage"
+	"github.com/kulikovav/hermitcrab/pkg/database"
+	"github.com/kulikovav/hermitcrab/pkg/provider/metadata"
+	"github.com/kulikovav/hermitcrab/pkg/provider/storage"
 )
 
 type Service struct {

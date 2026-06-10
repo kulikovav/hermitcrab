@@ -4,10 +4,10 @@
 # Lint variables helpers. These functions need the
 # following variables:
 #
-#    GOLANGCI_LINT_VERSION  -  The Golangci-lint version, default is v1.55.2.
+#    GOLANGCI_LINT_VERSION  -  The Golangci-lint version, default is v2.12.2.
 #        COMMITSAR_VERSION  -  The Commitsar version, default is v0.20.2.
 
-golangci_lint_version=${GOLANGCI_LINT_VERSION:-"v1.55.2"}
+golangci_lint_version=${GOLANGCI_LINT_VERSION:-"v2.12.2"}
 commitsar_version=${COMMITSAR_VERSION:-"v0.20.2"}
 
 function seal::lint::golangci_lint::install() {

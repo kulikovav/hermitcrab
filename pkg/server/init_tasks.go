@@ -6,7 +6,7 @@ import (
 
 	"github.com/seal-io/walrus/utils/cron"
 
-	"github.com/seal-io/hermitcrab/pkg/tasks/provider"
+	"github.com/kulikovav/hermitcrab/pkg/tasks/provider"
 )
 
 // startTasks starts the tasks by Cron Expression to do something periodically in background.
@@ -18,7 +18,8 @@ func (r *Server) startTasks(ctx context.Context, opts initOptions) (err error) {
 	}
 
 	// Register tasks.
-	err = cron.Schedule(provider.SyncMetadata(ctx, opts.ProviderService))
+	name, expr, task := provider.SyncMetadata(ctx, opts.ProviderService)
+	err = cron.Schedule(name, expr, task)
 
 	return err
 }

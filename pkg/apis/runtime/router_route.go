@@ -18,7 +18,7 @@ import (
 	"golang.org/x/exp/slices"
 	"k8s.io/apimachinery/pkg/util/sets"
 
-	"github.com/seal-io/hermitcrab/pkg/apis/runtime/bind"
+	"github.com/kulikovav/hermitcrab/pkg/apis/runtime/bind"
 )
 
 func (rt *Router) Routes(handler IHandler) IRouter {
@@ -54,7 +54,7 @@ func (rt *Router) Routes(handler IHandler) IRouter {
 
 			// Authorize.
 			if rt.authorizer != nil {
-				authedStatus := rt.authorizer.Authorize(c, route.RouteProfile.DeepCopy())
+				authedStatus := rt.authorizer.Authorize(c, route.DeepCopy())
 				if authedStatus != http.StatusOK {
 					c.AbortWithStatus(authedStatus)
 					return
@@ -127,7 +127,7 @@ func (rt *Router) Routes(handler IHandler) IRouter {
 							errorx.Wrap(err, ""),
 						).
 						SetType(gin.ErrorTypeBind).
-						SetMeta(route.RouteProfile.Summary)
+						SetMeta(route.Summary)
 
 					return
 				}
@@ -162,7 +162,7 @@ func (rt *Router) Routes(handler IHandler) IRouter {
 				err := errObj.(error)
 				if !isGinError(err) {
 					_ = c.Error(err).
-						SetMeta(route.RouteProfile.Summary)
+						SetMeta(route.Summary)
 				} else {
 					_ = c.Error(err)
 				}
@@ -442,7 +442,8 @@ func routeHandler(
 		resourceRouteNameCollectionCreate,
 		resourceRouteNameCollectionGet,
 		resourceRouteNameCollectionUpdate,
-		resourceRouteNameCollectionDelete)
+		resourceRouteNameCollectionDelete,
+	)
 
 	var singularPath, pluralPath string
 	if isResourceHandler {

@@ -14,14 +14,14 @@ import (
 
 // RequestCounting limits the request count in the given maximum,
 // returns 429 if the new request has waited with the given duration.
-func RequestCounting(max int, wait time.Duration) Handle {
-	if max <= 0 {
+func RequestCounting(limit int, wait time.Duration) Handle {
+	if limit <= 0 {
 		return func(c *gin.Context) {
 			c.AbortWithStatus(http.StatusTooManyRequests)
 		}
 	}
 
-	limiter := make(chan struct{}, max)
+	limiter := make(chan struct{}, limit)
 
 	var token struct{}
 
